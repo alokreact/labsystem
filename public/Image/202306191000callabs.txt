@@ -1,0 +1,26 @@
+1.  Adddress Intgration (ETA- 01-09-2022)
+2.  Add to Cart Integration (ETA- 04-09-2022)
+3.  Pages integration(In progress) (ETA- 03-09-2022)
+4.  Design Part (Test By disease, Banner part, Package Details ) (ETA- 10-09-2022)
+5.  payment Gateway Integration (ssl pending)
+6.  Mobile otp integration  (credntials not given)
+7.  View all Packages(03-09-2022) 
+8.  Functionality (Login ,sign up )(06-09-2022)
+9.  FUll admin (16-09-2022)
+ 
+
+
+https://www.facebook.com/calllabs/
+https://youtube.com/channel/UC8OhD515exFS1PNYqvcQk5Q
+https://www.linkedin.com/in/call-labs-437369191
+http://instagram.com/calllabs.kk
+
+Call labs, vasavi colony rood no 4. Kothapet Hyderabad,300036
+
+ 7893762020
+
+
+
+1.  Design Part in progress( Package Details, all packages  )
+2.  Edit and delete  functionality in admin (test ,packages, category, Labs)
+3.  Login and sign up in progress
