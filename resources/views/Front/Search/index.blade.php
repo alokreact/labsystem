@@ -76,12 +76,12 @@
                         testDiv += '<span class="text-3xl font-bold text-gray-900 dark:text-white">₹' +
                             data.total_price + '/-</span>';
                         testDiv +=
-                            '<a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" btn_add_to_cart_test" value="' +
+                            '<button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 btn_add_to_cart_test" value="' +
                             data.test_ids + '" data-type="test" data-lab="' + data.lab_id + '"';
                         testDiv += 'data-price="' + data.total_price + '"';
                         testDiv += 'data-singleprice="' + data.single_price + '">';
 
-                        testDiv += 'Add to cart</a>';
+                        testDiv += 'Add to cart</button>';
                         testDiv += '</div>';
                         testDiv += '</div></div>';
 
@@ -167,7 +167,7 @@
                                     '<span class="text-3xl font-bold text-gray-900 dark:text-white">₹' +
                                     data.total_price + '/-</span>';
                                 testDiv +=
-                                    '<a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" btn_add_to_cart_test" value="' +
+                                    '<a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 btn_add_to_cart_test" value="' +
                                     data.test_ids + '" data-type="test" data-lab="' + data
                                     .lab_id + '"';
                                 testDiv += 'data-price="' + data.total_price + '"';
@@ -208,5 +208,66 @@
                 })
             }
         })
+
+
+    $(document).on('click', '.btn_add_to_cart_test', function () {
+    
+            var button = $(this);
+
+        $(button).html('<i class="icofont-spinner-alt-6" style="padding:2px"></i>');
+
+    var productId = $(this).val();
+    var dataType = $(this).attr("data-type");
+    var labId = $(this).attr("data-lab");
+    var price = $(this).attr("data-price");
+    var singleprice = $(this).attr("data-singleprice");
+
+    var formData = {
+        productId: productId,
+        dataType: dataType,
+        labId: labId,
+        price: price,
+        singleprice: singleprice
+    };
+    console.log('productId', productId);
+    $.ajax({
+        type: 'POST',
+        data: formData,
+        url: APP_URL + '/test/add-to-cart',
+
+        success: function (response, textStatus, xhr) {
+            // console.log('productId', response.cart)
+            if (xhr.status === 200) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    showConfirmbutton: false,
+                    timer: 3000
+                })
+                Toast.fire({
+                    type: 'success',
+                    title: 'Test Added Successfully',
+                    //html: errorHtml,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        //window.location.reload(); // Reload the page
+                        $(button).html('Add to Cart');
+                        $('.badge-danger').html(response.cart);
+                        $('html, body').animate({
+                            scrollTop: $('header').offset().top
+                        }, 1000);
+                    }
+                });
+            } else {
+                alert(response.data)
+                //window.location.reload();
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+});
     </script>
 @endpush

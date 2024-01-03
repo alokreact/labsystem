@@ -48,11 +48,11 @@
 
             <div class="relative mr-2">
                 <span
-                    class="absolute top-0 right-0 bg-blue-200 text-blue-800 w-7 h-8 rounded-full px-2 py-1 -mt-3 -mr-2">
+                    class="absolute top-0 right-0 bg-blue-200 text-blue-800 w-7 h-8 rounded-full px-2 py-1 -mt-3 -mr-2 badge-danger">
                     1
                 </span>
 
-                <button class="flex items-center bg-blue-500 text-white px-4 py-2 rounded">
+                <a href="{{ route('cart') }}"><button class="flex items-center bg-blue-500 text-white px-4 py-2 rounded">
                     <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -60,7 +60,7 @@
                         </path>
                     </svg>
                     <span class="font-semibold">Cart</span>
-                </button>
+                </button></a>
             </div> |
 
             @guest

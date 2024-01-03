@@ -13,7 +13,6 @@ use App\Models\CartItem;
 use App\Models\Coupon;
 
 use Auth;
-use Gloudemans\Shoppingcart\Facades\Cart;
 
 use Illuminate\Support\Collection;
 
@@ -21,27 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends Controller{
 
-    function itemExistsInCart($itemId, &$cart){
-        foreach($cart as $item) {
-
-            //dd($item['id']);
-
-            if ($item['lab_id'] === $itemId) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    function packageExistsInCart($itemId, &$cart)
-    {
-        foreach ($cart as &$item) {
-            if ($item['id'] == $itemId) {
-                return true;
-            }
-        }
-        return false;
-    }   
+        
 
     public function addPackage(Request $request){       
         if(\Cart::count() > 0){
@@ -78,22 +57,21 @@ class CartController extends Controller{
         $user = Auth::user();        
         if($user && Auth::user()->role == '2'){
             $carts =[];
-            $carts = \Cart::content();
+            $carts = \Cart::getContent();
             $product_names =[];
-            if(\Cart::count() > 0){
+            if(\Cart::getTotalQuantity() > 0){
                 $type = CartService::getType($carts);
                 //dd($type);
                 if($type[0] === 'package'){
                     $product_id = $carts->pluck('options')->pluck('product_id');
                     $products = Package::find($product_id);    
-                    //dd($product_id);
-                    return view('Front-end.Packagecart.index',compact('carts','products'));
+                    return view('Front.Packagecart.index',compact('carts','products'));
                 }
-                $product_id=$carts->pluck('options')[0]['product_id'];
+                $product_id=$carts->pluck('attributes')[0]['product_id'];
                 $products = SubTest::find($product_id);
                 $product_names = $products->pluck('sub_test_name');
             }
-            return view('Front-end.Cart.index',compact('carts','product_names'));
+            return view('Front.Cart.cart',compact('carts','product_names'));
         } 
         else {
             return redirect()->route('signin');
@@ -126,7 +104,7 @@ class CartController extends Controller{
     }
 
     public function addToCart(Request $request){
-        \Cart::destroy();
+        \Cart::clear();
         $productId = $request->input('productId');
         $productId_arr = explode(',',$productId);
        
@@ -136,19 +114,21 @@ class CartController extends Controller{
         $price = $request->input('price');
         $lab = Lab::find($labId);
 
-        \Cart::setGlobalTax(0);
+      
+        \Cart::add(['id' => $labId, 
+        'name' => $lab->lab_name, 
+        'quantity' => 1, 
+        'price' => $price, 
+        'attributes' => 
+                ['product_id' => $productId_arr,
+                      'single_price'=>explode(',',$single_price),
+                      'type'=>'test']
+        ]);
+        $items = \Cart::getContent();
+        //dd($items);
 
-        \Cart::add( ['id' => $labId, 
-                    'name' => $lab->lab_name, 
-                    'qty' => 1, 'price' => $price, 
-                    'weight' =>2, 
-                    'options' => ['product_id' => $productId_arr,
-                                  'single_price'=>explode(',',$single_price),
-                                  'type'=>'test']
-                    ]
-                );
+        $cart = \Cart::getTotalQuantity();
 
-        $cart = \Cart::count();
         return response()->json(['cart'=>$cart,'message' =>'Succesfully Added'], Response::HTTP_OK);
     }
 
@@ -196,7 +176,6 @@ class CartController extends Controller{
         }
     }
 
-    
     public function saveCcouponInsession($coupon_code,$amt,$newPrice ): bool{
       
         $cartItems = \Cart::content();
@@ -212,6 +191,7 @@ class CartController extends Controller{
         session(['coupon_sesssion' => $data]);
         return true;
     }
+
     public function applyRefralCoupon(Request $request){
         $coupon_code = $request->post('coupon');
         $valid_coupon = $this->isValidCoupon($coupon_code);  
@@ -241,7 +221,6 @@ class CartController extends Controller{
         }
     }
 
-
     public function isValidCoupon(string $coupon_code) {
         //\DB::connection()->enableQueryLog();
         $coupon_code = trim($coupon_code);
@@ -255,7 +234,5 @@ class CartController extends Controller{
             return false;
         }
     }
-  
-
    
 }

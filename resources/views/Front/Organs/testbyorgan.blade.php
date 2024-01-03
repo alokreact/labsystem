@@ -17,7 +17,25 @@
         @include('Front.Search.Components.sidebar')
 
         <div class="p-4 sm:ml-4 w-full md:w-2/3">
+
+            <div class="flex justify-between p-1 my-2 w-full" id="count_result">
+
+                <span id="badge-dismiss-green"
+                    class="inline-flex items-center px-2 py-1 me-2 
+                text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
+                    Showing {{ count($subtests) }} results
+                </span>
+
+                <button
+                    class="border border-green-500 w-[120px]  rounded-full p-2 text-black hover:scale-110 hover:bg-green-500 hover:text-white search_multiple_test_btn">Check
+                    Now</button>
+
+            </div>
+
             <div class="flex flex-wrap p-2 justify-between flex-col md:flex-row">
+
+
+
                 @forelse ($subtests as $test)
                     <div
                         class="w-full md:w-[23%] max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mt-2">
@@ -37,7 +55,6 @@
                         </div>
                     </div>
                 @empty
-                
                 @endforelse
             </div>
 
@@ -51,3 +68,82 @@
         </div>
     </div>
 @endsection
+
+@push('after-scripts')
+<script>
+
+$(document).on('click', '.search_multiple_test_btn', function () {
+    var checkBoxValue = [];
+
+    $('input[name="test[]"]:checked').each(function () {
+        checkBoxValue.push($(this).val());
+    });
+    console.log('checkBoxValue', checkBoxValue.length)
+
+    if (checkBoxValue.length < 1) {
+        alert('Please select tests');
+        return;
+    }
+    $('#loader').removeClass('hidden');
+
+    $.ajax({
+        url: APP_URL + '/search/test',
+        data: { checkBoxValue },
+        method: 'POST',
+        success: function (response, textStatus, xhr) {
+            var testDiv = '';
+            var searchDiv = '';
+            if (xhr.status === 200) {
+
+                console.log('>>>',response);return;
+
+                $.each(response.tests, function (index, data) {
+                    var imageName = APP_URL + '/Image/' + data.image;
+                    //console.log('imageName',imageName)
+                    testDiv += '<div class="w-full md:w-[31%] mb-4 border mx-2">';
+                    testDiv += '<div class="border-b-2 rounded w-[260px] h-[144px] p-3 mx-auto">';
+                    testDiv += ' <img src=" ' + imageName + ' "/>';
+                    testDiv += '</div>';
+
+                    testDiv += '<div class="p-4 mt-2 items-center flex justify-between">';
+                    testDiv += '<h6 class="text-black text-basic font-semibold mb-2">';
+                    testDiv += '<i class="icofont-google-map" style="font-size:16px;color:#000"></i>Hyderabad</h6>';
+                    testDiv += '<button class="w-[120px]  border-green-500 text-green-500 rounded-full border p-2 hover:bg-green-500 hover:text-white btn_add_to_cart_test" value="' + data.test_ids + '" data-type="test" data-lab="' + data.lab_id + '"';
+                    testDiv += 'data-price="' + data.total_price + '"';
+                    testDiv += 'data-singleprice="' + data.single_price + '">';
+                    testDiv += 'Add To Cart</button></div>';
+                    testDiv += ' <div class="p-3 mt-1 mb-1 items-center bg-gray-100 flex justify-between my-1 mx-1 rounded-full text-black">';
+                    testDiv += '<del>₹<span>' + data.total_price * 2 + '/-</span></del>';
+                    testDiv += '<span>₹' + data.total_price + '/-</span>';
+                    testDiv += '<div class="sm">50% discount </div>';
+                    testDiv += '</div> </div>';
+                })
+
+                $.each(response.searchTerms.name, function (index, data) {
+
+                    var id = response.searchTerms.id[index];
+                    var count = 45;
+
+                    var result = data.slice(0, count) + (data.length > count ? "..." : "");
+
+                    searchDiv += '<span class="ml-2 p-2 chip">';
+                    searchDiv += result +
+                        '<i class="icofont-close-line-squared-alt remove_search_btn text-xl p-1 mb-1" data-id="' + id +
+                        '"></i></span>';
+
+                 });
+
+                $('#count_result').hide();
+                $('#organResult').hide();
+                $('#loader').addClass('hidden');
+                $('#searchResult').html(testDiv);
+                $('#test_header').hide();
+                $('#searchBreadcumb').removeClass('hidden');
+                $('#chipResult').html(searchDiv);
+            }
+        }
+    })
+})
+    </script>
+
+    @endpush

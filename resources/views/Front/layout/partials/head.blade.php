@@ -9,7 +9,8 @@
       
 
 <!-- Fonts -->
-<link rel="dns-prefetch" href="//fonts.gstatic.com">
+<link rel="stylesheet" href="{{asset('assets/icofont/icofont.min.css')}}">
+
 <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
 <link rel="stylesheet" href="{{asset('style.css')}}"/>

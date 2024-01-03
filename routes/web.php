@@ -23,9 +23,13 @@ Route::post('/create/otp', [App\Http\Controllers\AuthController::class,'generate
 Route::post('/verify/otp', [App\Http\Controllers\AuthController::class,'verifyOTP'])->name('otp.verify');
 
 Route::get('/landing',[App\Http\Controllers\HomeController::class, 'landing'])->name('landing');
-Route::get('/cart',[App\Http\Controllers\HomeController::class, 'cart']);
+
+
+Route::get('cart', [App\Http\Controllers\CartController::class,'cart'])->name('cart');
+
 Route::get('/checkout',[App\Http\Controllers\HomeController::class, 'checkout']);
 
+Route::post('/test/add-to-cart', [App\Http\Controllers\CartController::class,'addToCart']);
 
 Route::get('/search',[App\Http\Controllers\HomeController::class, 'search']);
 Route::post('/search/test', [App\Http\Controllers\HomeController::class,'getsearchList'])->name('searchList');

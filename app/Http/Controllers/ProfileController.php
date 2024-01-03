@@ -135,11 +135,16 @@ class ProfileController extends Controller{
     }
 
     public function coupon(){
-        
-        $user_id = Auth::user()->id;
-        $coupon = Coupon::where('user_id',$user_id)->get();
 
-        return view('Front.Profile.coupon',compact('coupon'));
+        $user_id = Auth::user()->id;
+        
+        if($user_id){
+            $coupon = Coupon::where('user_id',$user_id)->get();
+            return view('Front.Profile.coupon',compact('coupon'));
+        }
+        else{
+            abort('404');
+        }
     }
 
     public function createPatient(){
@@ -183,21 +188,15 @@ class ProfileController extends Controller{
                             $zip->addFile($image, basename($image));
                         }
                     }
-                    
             $zip->close();
             return Response::download($zipFilePath, 'reports.zip')->deleteFileAfterSend(true);
-
             }
         }
         else{
             abort(404);
         }    
     }
-
     public function paymentFail(){
         return view('Errors.Paymentfailed');
     }
-
-    
-
 }
