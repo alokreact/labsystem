@@ -17,26 +17,36 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/signin',[App\Http\Controllers\HomeController::class, 'login'])->name('signin');
 Route::post('/create/otp', [App\Http\Controllers\AuthController::class,'generateOTP'])->name('otp.create');
 Route::post('/verify/otp', [App\Http\Controllers\AuthController::class,'verifyOTP'])->name('otp.verify');
 
 Route::get('/landing',[App\Http\Controllers\HomeController::class, 'landing'])->name('landing');
 
+Route::get('/create/prescription', [App\Http\Controllers\HomeController::class,'prescription'])->name('upload-prescription');
 
 Route::get('cart', [App\Http\Controllers\CartController::class,'cart'])->name('cart');
-
-Route::get('/checkout',[App\Http\Controllers\HomeController::class, 'checkout']);
-
 Route::post('/test/add-to-cart', [App\Http\Controllers\CartController::class,'addToCart']);
+Route::delete('/remove/cart', [App\Http\Controllers\CartController::class,'remove_product'])->name('remove_product_from_cart');
+
+
+Route::get('/checkout',[App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout');
+
+
 
 Route::get('/search',[App\Http\Controllers\HomeController::class, 'search']);
 Route::post('/search/test', [App\Http\Controllers\HomeController::class,'getsearchList'])->name('searchList');
 Route::post('/searchlabs', [App\Http\Controllers\HomeController::class,'searchLabs'])->name('searchLabs');
+
+Route::post('/search/multipletest', [App\Http\Controllers\HomeController::class,'getMultipleSearchTest']);
+Route::post('/remove/multipletest', [App\Http\Controllers\HomeController::class,'removemultipleSearchTest']);
+
 Route::get('/list/search-result', [App\Http\Controllers\HomeController::class,'searchResultList']);
 
+Route::post('/remove-test', [App\Http\Controllers\HomeController::class,'removeTests'])->name('removeTests');
+
 Route::post('/search/labs', [App\Http\Controllers\HomeController::class,'searchLabsForTest'])->name('searchLabsForTest');
+
 Route::get('/testbyorgan/{id}', [App\Http\Controllers\OrganController::class, 'getTestbyOrgan'])->name('testbyorgan');
 Route::get('/organs/list', [App\Http\Controllers\OrganController::class, 'index'])->name('organs.index');
 
@@ -50,7 +60,6 @@ Route::get('/patient',[App\Http\Controllers\PatientController::class, 'index'])-
 Route::post('/save/patient', [App\Http\Controllers\PatientController::class,'store'])->name('savepatient');
 
 Route::get('/booking',[App\Http\Controllers\HomeController::class, 'booking'])->name('booking');
-
 Route::get('/coupon',[App\Http\Controllers\ProfileController::class, 'coupon'])->name('coupon');
 
 

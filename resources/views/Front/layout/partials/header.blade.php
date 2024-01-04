@@ -32,7 +32,8 @@
                         class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Packages</a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{route('upload-prescription')}}"
+                    
                         class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Upload
                         Prescription</a>
                 </li>
@@ -47,20 +48,26 @@
         <div class="flex items-center justify-space">
 
             <div class="relative mr-2">
+                @php
+                    $cart = Cart::getContent();
+                @endphp
+
                 <span
                     class="absolute top-0 right-0 bg-blue-200 text-blue-800 w-7 h-8 rounded-full px-2 py-1 -mt-3 -mr-2 badge-danger">
-                    1
+                    {{ $cart->count() }}
                 </span>
 
-                <a href="{{ route('cart') }}"><button class="flex items-center bg-blue-500 text-white px-4 py-2 rounded">
-                    <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm0 0V4a2 2 0 0 1 2-2h1a3 3 0 0 1 2.78 2H16a3 3 0 0 1 2.78-2H19a2 2 0 0 1 2 2v3">
-                        </path>
-                    </svg>
-                    <span class="font-semibold">Cart</span>
-                </button></a>
+                <a href="{{ route('cart') }}">
+                    <button
+                        class="flex items-center bg-blue-500 text-white px-4 py-2 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none rounded">
+                        <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 7h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2zm0 0V4a2 2 0 0 1 2-2h1a3 3 0 0 1 2.78 2H16a3 3 0 0 1 2.78-2H19a2 2 0 0 1 2 2v3">
+                            </path>
+                        </svg>
+                        <span class="font-semibold">Cart</span>
+                    </button></a>
             </div> |
 
             @guest
@@ -76,8 +83,16 @@
                             class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                             aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full"
-                                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+
+                            <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                                <svg class="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+
+
                         </button>
                     </div>
 
@@ -102,31 +117,32 @@
                         </div>
                         <ul class="py-1" role="none">
                             <li>
-                                <a href="{{route('address')}}"
+                                <a href="{{ route('address') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                     role="menuitem">Address</a>
                             </li>
                             <li>
-                                <a href="{{route('booking')}}"
+                                <a href="{{ route('booking') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                     role="menuitem">Booking</a>
                             </li>
                             <li>
-                                <a href="{{route('coupon')}}"
+                                <a href="{{ route('coupon') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                     role="menuitem">My Referal Coupon</a>
                             </li>
 
                             <li>
-                              <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                @csrf
-                          
-                                     <button class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                                    role="menuitem" type="submit">
-                               
-                                    Sign Out</button>
-                              
-                              </form>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                    @csrf
+
+                                    <button
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                                        role="menuitem" type="submit">
+
+                                        Sign Out</button>
+
+                                </form>
                             </li>
 
 
@@ -136,6 +152,5 @@
             @endguest
 
         </div>
-
     </div>
 </nav>

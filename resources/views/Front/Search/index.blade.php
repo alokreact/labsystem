@@ -84,7 +84,6 @@
                         testDiv += 'Add to cart</button>';
                         testDiv += '</div>';
                         testDiv += '</div></div>';
-
                     })
 
                     $.each(response.searchTerms.name, function(index, data) {
@@ -96,7 +95,7 @@
                         searchDiv +=
                             '<span id="badge-dismiss-green" class="inline-flex items-center px-2 py-1 me-2 text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">';
                         searchDiv += result +
-                            '<button type="button" class="close_search_btn inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300" data-dismiss-target="#badge-dismiss-green" aria-label="Remove" data-id="' +
+                            '<button type="button" class="close_search_btn inline-flex items-center p-1 ms-2 text-sm text-green-400 bg-transparent rounded-sm hover:bg-green-200 hover:text-green-900 dark:hover:bg-green-800 dark:hover:text-green-300"  data-id="' +
                             id + '">';
                         searchDiv +=
                             '<svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">';
@@ -208,66 +207,61 @@
                 })
             }
         })
-
-
-    $(document).on('click', '.btn_add_to_cart_test', function () {
-    
-            var button = $(this);
-
+    $(document).on('click', '.btn_add_to_cart_test', function(){
+        var button = $(this);
         $(button).html('<i class="icofont-spinner-alt-6" style="padding:2px"></i>');
+        var productId = $(this).val();
+        var dataType = $(this).attr("data-type");
+        var labId = $(this).attr("data-lab");
+        var price = $(this).attr("data-price");
+        var singleprice = $(this).attr("data-singleprice");
 
-    var productId = $(this).val();
-    var dataType = $(this).attr("data-type");
-    var labId = $(this).attr("data-lab");
-    var price = $(this).attr("data-price");
-    var singleprice = $(this).attr("data-singleprice");
+        var formData = {
+            productId: productId,
+            dataType: dataType,
+            labId: labId,
+            price: price,
+            singleprice: singleprice
+        };
+        console.log('productId', productId);
+        $.ajax({
+            type: 'POST',
+            data: formData,
+            url: APP_URL + '/test/add-to-cart',
 
-    var formData = {
-        productId: productId,
-        dataType: dataType,
-        labId: labId,
-        price: price,
-        singleprice: singleprice
-    };
-    console.log('productId', productId);
-    $.ajax({
-        type: 'POST',
-        data: formData,
-        url: APP_URL + '/test/add-to-cart',
-
-        success: function (response, textStatus, xhr) {
-            // console.log('productId', response.cart)
-            if (xhr.status === 200) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    icon: 'success',
-                    showConfirmbutton: false,
-                    timer: 3000
-                })
-                Toast.fire({
-                    type: 'success',
-                    title: 'Test Added Successfully',
-                    //html: errorHtml,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        //window.location.reload(); // Reload the page
-                        $(button).html('Add to Cart');
-                        $('.badge-danger').html(response.cart);
-                        $('html, body').animate({
-                            scrollTop: $('header').offset().top
-                        }, 1000);
-                    }
-                });
-            } else {
-                alert(response.data)
-                //window.location.reload();
+            success: function (response, textStatus, xhr) {
+                // console.log('productId', response.cart)
+                if (xhr.status === 200) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        showConfirmbutton: false,
+                        timer: 3000
+                    })
+                    Toast.fire({
+                        type: 'success',
+                        title: 'Test Added Successfully',
+                        //html: errorHtml,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            //window.location.reload(); // Reload the page
+                            $(button).html('Add to Cart');
+                            $('.badge-danger').html(response.cart);
+                            $('html, body').animate({
+                                scrollTop: $('header').offset().top
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    alert(response.data)
+                    //window.location.reload();
+                }
+            },
+            error: function (data) {
+                console.log(data);
             }
-        },
-        error: function (data) {
-            console.log(data);
-        }
+        });
     });
-});
     </script>
 @endpush

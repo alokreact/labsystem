@@ -13,20 +13,21 @@ class OrganController extends Controller{
     public function index(){
        
         $allorgans = Organ::paginate(12);
-        $organs = Organ::take(12)->get();
+        $organs = Organ::take(15)->get();
 
+        $categories = Category::take(15)->get();        
         $breadcrumbs = [
             ['label' => 'Home', 'url' => route('home')],
             ['label' => 'Organs'],
         ];
         //dd($allorgans);
-        return view('Front.Organs.index',compact('allorgans','organs','breadcrumbs'));
+        return view('Front.Organs.index',compact('allorgans','categories','organs','breadcrumbs'));
     }
 
 
 
     public function getTestbyOrgan($id){
-        
+
         $testsbyOrgan = Organ::find($id);
         $subtests= $testsbyOrgan->subtest;
         

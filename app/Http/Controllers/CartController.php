@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Lab;
 use App\Models\SubTest;
-
-//use App\Models\Cart;
-
 use App\Models\Package;
 use App\Service\CartService;
 use App\Models\CartItem;
@@ -79,18 +76,20 @@ class CartController extends Controller{
     }
 
     public function remove_product(Request $request){
-        //dd($request->all());
         $productId = $request->input('id');    
-        //dd($productId);
         //Check if the product is already in the cart
-        $cartItem = \Cart::search(function ($cartItem, $rowId) use ($productId) {
-                return $cartItem->id == $productId;
-        })->first();
+        
+        $cartItem = \Cart::get($productId);
+        // $cartItem = \Cart::search(function ($cartItem, $rowId) use ($productId) {
+        //         return $cartItem->id == $productId;
+        // })->first();
+        
         //dd($cartItem);
+
         if($cartItem){
-            \Cart::remove($cartItem->rowId);
+            \Cart::remove($cartItem->id);
         }
-        session()->flash('success', 'Product successfully removed!');   
+        return response()->json(['status'=>'success','message'=>'Product  removed successfully'],Response::HTTP_OK); 
     }
 
     public function update_product(Request $request)

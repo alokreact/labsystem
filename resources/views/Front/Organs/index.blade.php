@@ -16,7 +16,13 @@
     <div class="container mx-auto flex">
         @include('Front.Search.Components.sidebar')
 
-        <div class="p-4 sm:ml-4 w-full md:w-2/3">
+        <div class="p-4 ml-4 md:ml-20 w-full md:w-2/3">
+            <span id="badge-dismiss-green"
+            class="inline-flex items-center px-2 py-1 me-2 
+        text-sm font-medium text-green-800 bg-green-100 rounded dark:bg-green-900 dark:text-green-300">
+            Showing {{ count($allorgans) }} results
+        </span>
+
             <div class="flex flex-wrap p-2 justify-between flex-column md:flex-row">
                 @forelse ($allorgans as $organ)
                     <div

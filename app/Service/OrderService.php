@@ -76,7 +76,7 @@ class  OrderService{
     }
 
     public static function getProductnames($carts){
-        $product_id=$carts->pluck('options')[0]['product_id'];
+        $product_id=$carts->pluck('attributes')[0]['product_id'];
         $products = SubTest::find($product_id);
         $product_names = $products->pluck('sub_test_name');
         return $product_names;

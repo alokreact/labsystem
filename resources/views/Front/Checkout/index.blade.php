@@ -4,16 +4,12 @@
 
     <div class="container mx-auto mb-4">
         <div class="flex">
-
             <div class="w-3/4 mb-4 p-2">
                 @include('Front.Checkout.Components.stepper')
-
                 @include('Front.Checkout.Components.tab_content')
-
             </div>
 
             <div class="w-1/4 p-2 hidden md:block">
-                
                 <aside id="separator-sidebar"
                     class="w-full relative top-0 left-0 z-999 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
                     aria-label="Sidebar">
@@ -69,10 +65,108 @@
 
                     </div>
                 </aside>
-
-                
             </div>
+
 
         </div>
     </div>
 @endsection
+
+@push('after-scripts')
+    <script>
+        $(".nextTab").on('click', function(e) {
+            e.preventDefault();
+
+            var currentTab = $(this).val();
+
+            if (currentTab === "1") {
+                var errors = [];
+                var address = $('input[name="address"]:checked').val();
+
+                if (!address) {
+                    errors.push('Please select an Address.');
+                }
+
+                if (errors.length > 0) {
+                    var errorHtml = '<ul>';
+                    errors.forEach(function(error) {
+                        errorHtml += '<li>' + error + '</li>';
+                    });
+                    errorHtml += '</ul>';
+                    Swal.fire({
+                        icon: 'error',
+                        html: errorHtml,
+                    });
+                } else {
+                    $('#dashboard-tab').removeAttr('disabled');
+                    $('#dashboard-tab').click();
+
+                }
+            }
+        });
+        $('#pateint_tab_forward_btn').on('click', function(e) {
+            e.preventDefault();
+
+            var btnVal = $(this).val();
+
+            if (btnVal === "2") {
+
+                var errors = [];
+                var patient = $('input[name="patient[]"]:checked').val();
+
+                if (!patient) {
+                    errors.push('Please select an Patient.');
+                }
+                if (errors.length > 0) {
+                    var errorHtml = '<ul>';
+                    errors.forEach(function(error) {
+                        errorHtml += '<li>' + error + '</li>';
+                    });
+                    errorHtml += '</ul>';
+
+                    Swal.fire({
+                        icon: 'error',
+                        html: errorHtml,
+                    });
+
+                } else {
+                    $('#settings-tab').removeAttr('disabled');
+                    $('#settings-tab').click()
+                }
+            }
+        });
+
+        $('#slot_tab_forward_btn').on('click', function(e) {
+            var btnVal = $(this).val();
+            if (btnVal === 3) {
+            
+                var errors = [];
+                var slot_day = $('input[name="slot_day"]:checked').val();
+                var slot_time = $('input[name="slot_time"]:checked').val();
+
+                if (!slot_day) {
+                    errors.push('Please select a Date.');
+                }
+                if (!slot_time) {
+                    errors.push('Please select a Time.');
+                }
+                if (errors.length > 0) {
+                    var errorHtml = '<ul>';
+                    errors.forEach(function(error) {
+                        errorHtml += '<li>' + error + '</li>';
+                    });
+                    errorHtml += '</ul>';
+                    Swal.fire({
+                        icon: 'error',
+                        html: errorHtml,
+                    });
+                } else {
+                    // nextTab = currentTab + 3;
+                    // console.log('>>>>nextTab', currentTab)
+                    // console.log('>>>>nextTab', nextTab)
+                    // showTab(nextTab);
+                }
+            }
+        });
+    </script>
+@endpush

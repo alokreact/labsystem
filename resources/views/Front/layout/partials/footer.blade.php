@@ -148,102 +148,10 @@
             ]
         });
 
-        $("#nextTab").click(function(e) {
-            e.preventDefault();
 
-            var currentTab = $(this).val();
-            if (currentTab === "1") {
+     
 
-                console.log('currentTab', currentTab)
-
-                $('#dashboard-tab').click();
-                //  var errors = [];
-                //  var address = $('input[name="address"]:checked').val();
-
-                //  if (!address) {
-                //      errors.push('Please select an Address.');
-                //  }
-
-                //  if (errors.length > 0) {
-                //      var errorHtml = '<ul>';
-                //      errors.forEach(function(error) {
-                //          errorHtml += '<li>' + error + '</li>';
-                //      });
-                //      errorHtml += '</ul>';
-                //      Swal.fire({
-                //          icon: 'error',
-                //          html: errorHtml,
-                //      });
-                //  } else {
-
-                //}
-            }
-        });
-
-        $('#pateint_tab_forward_btn').on('click', function(e) {
-            e.preventDefault();
-
-            if (nextTab === 2) {
-                var errors = [];
-                var patient = $('input[name="patient[]"]:checked').val();
-                if (!patient) {
-                    errors.push('Please select an Patient.');
-                }
-                if (errors.length > 0) {
-                    var errorHtml = '<ul>';
-                    errors.forEach(function(error) {
-                        errorHtml += '<li>' + error + '</li>';
-                    });
-                    errorHtml += '</ul>';
-
-                    Swal.fire({
-                        icon: 'error',
-                        html: errorHtml,
-                    });
-
-                } else {
-                    nextTab = currentTab + 2;
-                }
-            }
-        });
-
-        $('#slot_tab_forward_btn').on('click', function(e) {
-            if (nextTab === 3) {
-                var errors = [];
-
-                var slot_day = $('input[name="slot_day"]:checked').val();
-                var slot_time = $('input[name="slot_time"]:checked').val();
-
-
-                if (!slot_day) {
-                    errors.push('Please select a Date.');
-                }
-                if (!slot_time) {
-                    errors.push('Please select a Time.');
-                }
-
-                if (errors.length > 0) {
-                    var errorHtml = '<ul>';
-                    errors.forEach(function(error) {
-                        errorHtml += '<li>' + error + '</li>';
-                    });
-                    errorHtml += '</ul>';
-
-                    Swal.fire({
-                        icon: 'error',
-                        //title: 'Validation Errors',
-                        html: errorHtml,
-                    });
-                } else {
-
-                    nextTab = currentTab + 3;
-                    console.log('>>>>nextTab', currentTab)
-                    console.log('>>>>nextTab', nextTab)
-
-                    showTab(nextTab);
-                }
-            }
-        });
+        
 
         $.ajaxSetup({
             headers: {
@@ -555,7 +463,6 @@
                 });
             }
         });
-
 
         $("#add_patient").on('click', function(event) {
             
